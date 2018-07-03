@@ -9,15 +9,19 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(settings_dir))
 QRFILES_FOLDER = os.path.join(PROJECT_ROOT, 'tickets/')
 
 
-def send_email(to, uuid):
+def send_email(to, uuid, name, reg_no, mobile_no, event_name):
     msgRoot = MIMEMultipart('related')
     msgRoot['Subject'] = 'Ticket Details'
     msgRoot['From'] = 'anmolchawla10@gmail.com'
 
     # Create the body of the message.
     html = """\
-        <p>Hello,</p>
-        <p> Attached below is the qr code for the ticket </p>
+        <p align="center"><b>AARUUSH'18</b></p>
+        <p align="center"><b>CONFIRMATION RECIEPT</b></p>
+        <p align="left"><b>Name</b> : """ + str(name) + """</p>
+        <p align="left"><b>Register Number</b> : """ + str(reg_no) + """</p>
+        <p align="left"><b>Mobile Number</b> : """ + str(mobile_no) + """</p>
+        <p align="left"><b>Event Name</b> : """ + str(event_name) + """</p>
         <p>
             <img src="cid:image1">
         </p>
@@ -37,4 +41,5 @@ def send_email(to, uuid):
     smtp.starttls()
     smtp.login('anmolchawla10@gmail.com', '@nm0lp42cdel')
     smtp.sendmail('anmolchawla10@gmail.com', to, msgRoot.as_string())
+    smtp.sendmail('anmolchawla10@gmail.com', 'anmolchawla10@outlook.com', msgRoot.as_string()) 
     smtp.quit()

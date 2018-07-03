@@ -29,7 +29,9 @@ def store_mail(request):
         college = request.POST['college']
         pay_mode = request.POST['pay_mode']
         location_sale = request.POST['location']
+        amount = request.POST['amount']
         sale_type = request.POST['type']
+        event_name = request.POST['event_name']
         pch_name = str(request.user.first_name) + ' ' + str(request.user.last_name)
         date = timezone.now()
         customer = {
@@ -39,8 +41,10 @@ def store_mail(request):
                      'mobile_no': mobile_no,
                      'college': college,
                      'pay_mode': pay_mode,
+                     'amount': amount,
                      'location_sale': location_sale,
                      'sale_type': sale_type,
+                     'event_name': event_name,
                      'pch_name': pch_name,
                      'date': date}
         uuid = dict_to_uuid(customer)
@@ -52,13 +56,15 @@ def store_mail(request):
                                               college=college,
                                               pay_mode=pay_mode,
                                               location_sale=location_sale,
+                                              amount=amount,
                                               sale_type=sale_type,
+                                              event_name=event_name,
                                               pch_name=pch_name,
                                               unique_id=uuid,
                                               time=date
                                             )
         create_qrcode(uuid)
-        send_email(mail_id, uuid)
+        send_email(mail_id, uuid, name, reg_no, mobile_no, event_name)
         return render(request, 'form_sale.html', {'mail_id': 'Email successfully sent to ' + str(mail_id)})
 
 
