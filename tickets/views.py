@@ -30,7 +30,7 @@ def store_mail(request):
         pay_mode = request.POST['pay_mode']
         location_sale = request.POST['location']
         sale_type = request.POST['type']
-        pch_name = request.POST['pch']
+        pch_name = str(request.user.first_name) + ' ' + str(request.user.last_name)
         date = timezone.now()
         customer = {
                      'name': name,
