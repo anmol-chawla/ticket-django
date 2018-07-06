@@ -9,84 +9,86 @@
 <body>
   <div class="login-page">
     <div class="form" >
-    <h1>Registration Details</h1>
-    <h4>{{ mail_id }}</h4>
+      <h1>Registration Details</h1>
+      <h4>{{ mail_id }}</h4>
       <form class="sale-details" action="{% url 'insert' %}" method="post">
+       <table cellspacing="14" cellpadding="3">
         {% csrf_token %}
-      <table cellspacing="14" cellpadding="3">
        <tr>
-       <td>Name</td>
+        <td>Name</td>
         <td><input type="text" name="name" /></td>
-        </tr>
-        <tr>
+      </tr>
+      <tr>
         <td>Registration No.</td>
         <td>
-        <input type="text" name="reg_no" />
+          <input type="text" name="reg_no" />
         </td>
-        </tr>
-        <tr>
+      </tr>
+      <tr>
         <td>Email ID</td>
         <td><input type="email" name="mail_id" /></td>
-        </tr>
-        <tr>
+      </tr>
+      <tr>
         <td>Mobile Number</td>
-	<td><input type="text" name="phone" /></td>
-	</tr>
-	<tr>
-	<td>College Name</td>
-	<td><input type="text" name="college" /></td>
-	</tr>
-	<tr>
-	<td>Payment Method</td>
-	<td>
-	<div class="custom-select">
-	<select name="pay_mode">
-		<option>Cash</option>
-		<option>PayTM</option>
-		<option>Tez</option>
-		<option>Card</option>
-	</select></div></td>
-	</tr>
-	<tr>
-	<td>Ticket Type</td>
-	<td>
-	<div class="custom-select">
-	<select name="type">
-		<option>Workshop</option>
-		<option>Highlights</option>
-		<option>Proshow</option>
-	</select></div></td>
-	</tr>
-  <tr>
-    <td>Event Name</td>
-    <td><input type="text" name="event_name" /></td>
-  </tr>
-  <tr>
-    <td>Amount</td>
-    <td><input type="text" name="amount" /></td>
-  </tr> 
-	<tr>
-	<td>Location Of Sale</td>
-	<td><input type="text" name="location" /></td>
-	</tr>
-	<tr>
-	<td>User :</td>
-	<td>{{ request.user.first_name }} {{ request.user.last_name }}</td>
-	</tr>
-        
-        </table>
-        <button>Submit</button>
-      </form>
-      <p></p>
+      	<td><input type="text" name="phone" /></td>
+      </tr>
+      <tr>
+	      <td>College Name</td>
+	      <td><input type="text" name="college" /></td>
+	    </tr>
+	    <tr>
+	      <td>Payment Method</td>
+	      <td>
+          	<select name="pay_mode">
+		          <option>Cash</option>
+	           	<option>PayTM</option>
+	           	<option>Tez</option>
+		          <option>Card</option>
+            </select></td>
+	    </tr>
+	    <tr>
+	       <td>Ticket Type</td>
+	       <td>
+	           <select name="type" id="first-type">
+                <option selected value="base">--Choose type--</option>
+            		<option value="Workshop">Workshop</option>
+		            <option value="Highlights">Highlights</option>
+		            <option vaue="Proshow">Proshow</option>
+	           </select></td>
+    	</tr>
+      <tr>
+        <td>Event Name</td>
+        <td>
+            <select name="event_name" id="second-type">
+              <option>--Choose event--</option>
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Amount</td>
+        <td id='amount_field'><input type="text" name="amount" readonly/></td>
+      </tr> 
+	    <tr>
+	      <td>Location Of Sale</td>
+	      <td><input type="text" name="location" /></td>
+	    </tr>
+	    <tr>
+	     <td>User :</td>
+	     <td>{{ request.user.first_name }} {{ request.user.last_name }}</td>
+	    </tr>
+  </table>
+    <button>Submit</button>
+  </form>
+    <p></p>
       <form action='/tickets/logout'>
       <button>LOGOUT</button>
-    </form>
+  </form>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="../static/js/login.js"></script>
-
 <script>
+
 var x, i, j, selElmnt, a, b, c;
 
 x = document.getElementsByClassName("custom-select");
@@ -127,12 +129,11 @@ for (i = 0; i < x.length; i++) {
   }
   x[i].appendChild(b);
   a.addEventListener("click", function(e) {
-     
       e.stopPropagation();
       closeAllSelect(this);
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
-    });
+    });  
 }
 function closeAllSelect(elmnt) {
   
@@ -153,8 +154,38 @@ function closeAllSelect(elmnt) {
   }
 }
 
-document.addEventListener("click", closeAllSelect);</script>
+document.addEventListener("click", closeAllSelect);
+</script>
 
+<script>
+jQuery(function($) {
+    var events = {
+        'Workshop': ['Hacktrack', 'IBM', 'Diesel Vehicle Overhauling'],
+        'Highlights': ['Highlight1', 'Highlight2'],
+        'Proshow': ['Proshow1'],
+    }
+    var prices = {
+      'Hacktrack' : '1500',
+      'IBM' : '1300',
+      'Diesel Vehicle Overhauling' : '1200',
+    }
+
+    var $events = $('#second-type');
+    var $prices = $('#amount')
+    $('#first-type').on('change', function () {
+        var event = $(this).val(), evts = events[event] || [];
+        var html = $.map(evts, function(evt){
+            return '<option value="' + evt + '">' + evt + '</option>'
+        }).join('');
+        $events.html(html);
+        document.getElementById('amount_field').innerHTML = '<input type="text" value="' + prices[$events.val()] + '" name="amount" readonly>';
+
+    });
+    $('#second-type').on('change', function(){
+        document.getElementById('amount_field').innerHTML = '<input type="text" value="' + prices[$(this).val()] + '" name="amount" readonly>';
+    });
+});
+</script>
 </body>
 </html>
 

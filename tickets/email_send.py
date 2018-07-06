@@ -29,17 +29,19 @@ def send_email(to, uuid, name, reg_no, mobile_no, event_name):
 
     # Record the MIME types.
     msgHtml = MIMEText(html, 'html')
-    img = open(QRFILES_FOLDER + 'QRCodes/' + uuid +'.png', 'rb').read()
+    img = open(QRFILES_FOLDER + 'QRCodes/' + uuid + '.png', 'rb').read()
 
     msgImg = MIMEImage(img, 'png')
     msgImg.add_header('Content-ID', '<image1>')
-    msgImg.add_header('Content-Disposition', 'inline', filename=QRFILES_FOLDER + 'QRCodes/' + uuid +'.png')
+    msgImg.add_header('Content-Disposition', 'inline',
+                      filename=QRFILES_FOLDER + 'QRCodes/' + uuid + '.png')
 
     msgRoot.attach(msgHtml)
     msgRoot.attach(msgImg)
     smtp = smtplib.SMTP('smtp.gmail.com: 587')
     smtp.starttls()
+    recipients = [to]
+    recipients.append('anmolchawla10@outlook.com')
     smtp.login('anmolchawla10@gmail.com', '@nm0lp42cdel')
-    smtp.sendmail('anmolchawla10@gmail.com', to, msgRoot.as_string())
-    smtp.sendmail('anmolchawla10@gmail.com', 'anmolchawla10@outlook.com', msgRoot.as_string()) 
+    smtp.sendmail('anmolchawla10@gmail.com', recipients, msgRoot.as_string())
     smtp.quit()

@@ -102,10 +102,9 @@ body {
   position: relative;
   font-family: Arial;
 }
-.custom-select select {
-  display: none; /*hide original SELECT element:*/
-}
-.select-selected {
+
+
+.select-selected{
   background-color: #76b852;
 }
 /*style the arrow inside the select element:*/
