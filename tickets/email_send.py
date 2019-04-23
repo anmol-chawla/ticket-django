@@ -42,6 +42,6 @@ def send_email(to, uuid, name, reg_no, mobile_no, event_name):
     smtp.starttls()
     recipients = [to]
     recipients.append('anmolchawla10@outlook.com')
-    smtp.login('anmolchawla10@gmail.com', '@nm0lp42cdel')
-    smtp.sendmail('anmolchawla10@gmail.com', recipients, msgRoot.as_string())
+    smtp.login(<email>, <password>)
+    smtp.sendmail(<email>, recipients, msgRoot.as_string())
     smtp.quit()
